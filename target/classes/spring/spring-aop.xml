@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="helloService" class="com.vnb.spring.aop.service.imple.HelloService"></bean>
+
+    <bean id="helloServiceAspect" class="com.vnb.spring.aop.HelloServiceAspect"></bean>
+
+    <aop:config>
+        <aop:pointcut id="commonPointCut" expression="execution (* com.vnb.spring.aop.service..*.*(..))"></aop:pointcut>
+        <aop:aspect ref="helloServiceAspect">
+            <aop:pointcut id="" expression=""></aop:pointcut>
+            <aop:before method="beforeAdvice1" pointcut="execution(* com.vnb.spring.aop.service..*.sayHello(..))"></aop:before>
+
+
+            <aop:before method="beforeAdvice2" pointcut="execution(* com.vnb.spring.aop.service..*.sayBefore(..)) and args(param)"
+                        arg-names="param"></aop:before>
+
+            <aop:before method="beforeAdvice1" pointcut="execution(* com.vnb.spring.aop.service..*.sayBefore(..))"></aop:before>
+
+            <aop:after method="afterAdvice" pointcut="execution (* com.vnb.spring.aop.service..*.sayHello(..))"></aop:after>
+            <aop:after-returning  method="afterReturningAdvice"
+                                  pointcut="execution (* com.vnb.spring.aop.service..*.sayAfterReturning(..))"
+                                  returning="returnArgs"></aop:after-returning>
+
+            <aop:after-throwing method="afterThrowingAdvice"
+                                pointcut="execution(* com.vnb.spring.aop.service..*.sayThrowing(..))"
+                                arg-names="e"
+                                throwing="e"></aop:after-throwing>
+            
+            <aop:around method="aroundAdvice"
+                         pointcut="execution(* com.vnb.spring.aop.service..*.sayAround(..))"></aop:around>
+            <aop:declare-parents types-matching="com.vnb.spring.aop.service..IHelloService+"
+                                 implement-interface="com.vnb.spring.aop.service.IIntroductionService"
+                                  default-impl="com.vnb.spring.aop.service.imple.IntroductiondService"></aop:declare-parents>
+
+        </aop:aspect>
+    </aop:config>
+</beans>
